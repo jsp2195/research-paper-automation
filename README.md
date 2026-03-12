@@ -33,7 +33,6 @@ Typical uses:
 * extracting plots for presentations
 * building figure datasets
 
-Source: fileciteturn1file2
 
 ---
 
@@ -69,7 +68,6 @@ Typical uses:
 * journal clubs
 * lab meetings
 
-Source: fileciteturn1file4
 
 ---
 
@@ -96,7 +94,6 @@ Extracted information includes:
 
 This is useful for exporting literature notes or extracting collaborator feedback.
 
-Source: fileciteturn1file1
 
 ---
 
@@ -131,7 +128,6 @@ Typical uses:
 * thesis preparation
 * rapid figure insertion
 
-Source: fileciteturn1file3
 
 ---
 
@@ -146,7 +142,6 @@ Behavior:
 
 This is useful when journals require PDF figures while LaTeX workflows use PNG.
 
-Source: fileciteturn1file0
 
 ---
 
