@@ -4,17 +4,19 @@ A lightweight Python toolkit that automates common academic workflows for readin
 
 This repository contains utilities for extracting figures from PDFs, converting papers into presentation slides, extracting comments and highlights, generating LaTeX figure blocks, and synchronizing image formats commonly required by journals.
 
-The goal is to eliminate repetitive tasks that researchers perform when reading papers, preparing presentations, and writing manuscripts.
+The goal is to eliminate repetitive tasks researchers perform when reading papers, preparing presentations, and writing manuscripts.
 
 ---
 
 # Features
 
-## 1. Extract Figures From PDFs
+## 1. `extract_figures.py`
 
-Automatically detect and extract embedded images from academic papers.
+Extract all embedded images from a research paper PDF.
 
-Output:
+The script scans every page of a PDF and saves all detected images into a `figures/` directory.
+
+Output example:
 
 ```
 figures/
@@ -23,15 +25,19 @@ figures/
   page002_fig1.png
 ```
 
-Useful for:
+This script uses PyMuPDF to identify embedded image objects and saves them with page-based naming.
 
-* literature reviews
-* collecting datasets of figures
-* preparing presentation slides
+Typical uses:
+
+* collecting figures from papers
+* extracting plots for presentations
+* building figure datasets
+
+Source: fileciteturn1file2
 
 ---
 
-## 2. Generate Slides From Papers
+## 2. `generate_slides.py`
 
 Automatically convert a research paper into a PowerPoint presentation.
 
@@ -47,7 +53,7 @@ PDF
 Each slide contains:
 
 * figure image
-* caption
+* detected caption
 
 Output:
 
@@ -55,19 +61,23 @@ Output:
 paper_presentation.pptx
 ```
 
-Useful for:
+The script uses spatial proximity between images and nearby text blocks to infer figure captions.
+
+Typical uses:
 
 * paper presentations
 * journal clubs
 * lab meetings
 
+Source: fileciteturn1file4
+
 ---
 
-## 3. Extract PDF Annotations
+## 3. `pdf_comments.py`
 
-Extract comments, highlights, and notes from annotated papers.
+Extract annotations, highlights, and comments from an annotated PDF.
 
-Output formats:
+The script exports annotations in multiple formats:
 
 ```
 pdf_annotations.json
@@ -75,33 +85,31 @@ pdf_annotations.csv
 pdf_annotations_readable.txt
 ```
 
-Captured fields:
+Extracted information includes:
 
-* page
+* page number
 * annotation type
 * highlighted text
-* comment
+* comment text
 * author
-* date
+* timestamp
 
-Useful for:
+This is useful for exporting literature notes or extracting collaborator feedback.
 
-* literature notes
-* supervisor feedback
-* collaborative paper reviews
+Source: fileciteturn1file1
 
 ---
 
-## 4. Generate LaTeX Figure Blocks
+## 4. `generate_latex_figures.py`
 
-Automatically generate LaTeX figure environments from a folder of images.
+Generate LaTeX figure blocks automatically from a folder of images.
 
 Example input:
 
 ```
 figures/
-   stress_curve.png
-   yield_surface.png
+  stress_curve.png
+  yield_surface.png
 ```
 
 Generated LaTeX:
@@ -111,25 +119,34 @@ Generated LaTeX:
 \centering
 \includegraphics[width=0.7\textwidth]{figures/stress_curve.png}
 \caption{Stress curve}
+\label{fig:stress_curve}
 \end{figure}
 ```
 
-Useful for:
+File names are automatically converted into readable captions.
+
+Typical uses:
 
 * writing papers
 * thesis preparation
 * rapid figure insertion
 
+Source: fileciteturn1file3
+
 ---
 
-## 5. PNG ↔ PDF Synchronization
+## 5. `png2pdf2png.py`
 
-Automatically ensure that images exist in both PNG and PDF format.
+Synchronize image formats within a folder by ensuring each image exists in both PNG and PDF format.
 
-Useful for:
+Behavior:
 
-* journal submission requirements
-* LaTeX workflows
+* converts PNG → PDF if PDF does not exist
+* converts PDF → PNG if PNG does not exist
+
+This is useful when journals require PDF figures while LaTeX workflows use PNG.
+
+Source: fileciteturn1file0
 
 ---
 
@@ -138,7 +155,7 @@ Useful for:
 Clone the repository:
 
 ```
-git clone https://github.com/yourusername/research-paper-automation.git
+git clone https://github.com/YOUR_USERNAME/research-paper-automation.git
 cd research-paper-automation
 ```
 
@@ -148,7 +165,7 @@ Install dependencies:
 pip install -r requirements.txt
 ```
 
-Dependencies:
+Required libraries:
 
 * pymupdf
 * pillow
@@ -158,83 +175,47 @@ Dependencies:
 
 ---
 
+# Example Workflow
+
+Typical workflow when analyzing a new research paper:
+
+```
+1. Extract figures
+
+python extract_figures.py
+
+2. Generate presentation slides
+
+python generate_slides.py
+
+3. Export annotations and highlights
+
+python pdf_comments.py
+
+4. Generate LaTeX figure blocks
+
+python generate_latex_figures.py
+```
+
+---
+
 # Repository Structure
 
 ```
 research-paper-automation/
 
-paper_tools/
-
-    pdf/
-        extract_figures.py
-        extract_annotations.py
-
-    slides/
-        pdf_to_slides.py
-
-    latex/
-        latex_from_figures.py
-
-    images/
-        sync_png_pdf.py
+extract_figures.py
+generate_slides.py
+pdf_comments.py
+generate_latex_figures.py
+png2pdf2png.py
 
 examples/
 
-    example_paper.pdf
+example_paper.pdf
 
-outputs/
-
-    extracted_figures/
-    paper_presentation.pptx
-    annotations.json
-    figures.tex
-```
-
----
-
-# Example Workflows
-
-## Extract Figures
-
-```
-python paper_tools/pdf/extract_figures.py
-```
-
----
-
-## Generate Slides
-
-```
-python paper_tools/slides/pdf_to_slides.py
-```
-
----
-
-## Extract PDF Annotations
-
-```
-python paper_tools/pdf/extract_annotations.py
-```
-
----
-
-## Generate LaTeX Figures
-
-```
-python paper_tools/latex/latex_from_figures.py
-```
-
----
-
-# Example Pipeline
-
-Typical workflow when reading a new paper:
-
-```
-1. Extract figures from the PDF
-2. Generate slides for a presentation
-3. Export annotations and comments
-4. Insert selected figures into LaTeX
+figures/
+output/
 ```
 
 ---
@@ -244,13 +225,13 @@ Typical workflow when reading a new paper:
 This toolkit is designed for:
 
 * PhD students
-* researchers
 * postdoctoral researchers
-* research labs
+* academic labs
+* research groups
 
-Typical use cases include:
+Typical uses include:
 
 * literature reviews
 * paper presentations
 * manuscript preparation
-* extracting figures for datasets
+* extracting datasets of figures
