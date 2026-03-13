@@ -1,232 +1,118 @@
-# Research Paper Automation Toolkit
+# Research Paper Automation
 
-A lightweight Python toolkit that automates common academic workflows for reading, presenting, and writing research papers.
+Research Paper Automation is a lightweight Python repository of utility scripts for repetitive academic PDF workflows: extracting embedded figures, generating slide decks from figures and nearby captions, exporting PDF annotations/comments, verifying annotation exports, and synchronizing PNG/PDF figure formats. It is a practical research workflow scaffold (not a packaged library) intended to speed up day-to-day paper reading, presentation prep, and manuscript drafting.
 
-This repository contains utilities for extracting figures from PDFs, converting papers into presentation slides, extracting comments and highlights, generating LaTeX figure blocks, and synchronizing image formats commonly required by journals.
+## Main Problem This Repository Solves
 
-The goal is to eliminate repetitive tasks researchers perform when reading papers, preparing presentations, and writing manuscripts.
+Researchers often spend significant time on manual formatting and extraction tasks around papers (copying figures, collecting comments, building slides, and generating LaTeX figure blocks). This repository consolidates those chores into focused scripts so the workflow is faster and more reproducible.
 
----
+## Workflow at a Glance
 
-# Features
+1. **Figure extraction** from a PDF using PyMuPDF.
+2. **Slide generation** by pairing extracted figures with nearby caption-like text.
+3. **Annotation export** (JSON/CSV/readable TXT) from commented PDFs.
+4. **Annotation verification** by comparing exported records against the source PDF.
+5. **Image format synchronization** between PNG and PDF files for publication workflows.
 
-## 1. `extract_figures.py`
+## Repository Structure
 
-Extract all embedded images from a research paper PDF.
-
-The script scans every page of a PDF and saves all detected images into a `figures/` directory.
-
-Output example:
-
-```
-figures/
-  page001_fig1.png
-  page001_fig2.png
-  page002_fig1.png
-```
-
-This script uses PyMuPDF to identify embedded image objects and saves them with page-based naming.
-
-Typical uses:
-
-* collecting figures from papers
-* extracting plots for presentations
-* building figure datasets
-
-
----
-
-## 2. `generate_slides.py`
-
-Automatically convert a research paper into a PowerPoint presentation.
-
-Pipeline:
-
-```
-PDF
-  → detect figures
-  → detect nearby captions
-  → generate slides
+```text
+research-paper-automation/
+├── README.md
+├── .gitignore
+└── scripts/
+    ├── pdf_figures/
+    │   ├── extract_figures.py
+    │   ├── generate_slides.py
+    │   └── generate_latex_figures.py
+    ├── pdf_annotations/
+    │   ├── pdf_comments.py
+    │   └── pdf_comment_verify.py
+    └── image_format_sync/
+        └── png2pdf2png.py
 ```
 
-Each slide contains:
+## Setup / Installation
 
-* figure image
-* detected caption
+### 1) Clone
 
-Output:
-
-```
-paper_presentation.pptx
-```
-
-The script uses spatial proximity between images and nearby text blocks to infer figure captions.
-
-Typical uses:
-
-* paper presentations
-* journal clubs
-* lab meetings
-
-
----
-
-## 3. `pdf_comments.py`
-
-Extract annotations, highlights, and comments from an annotated PDF.
-
-The script exports annotations in multiple formats:
-
-```
-pdf_annotations.json
-pdf_annotations.csv
-pdf_annotations_readable.txt
-```
-
-Extracted information includes:
-
-* page number
-* annotation type
-* highlighted text
-* comment text
-* author
-* timestamp
-
-This is useful for exporting literature notes or extracting collaborator feedback.
-
-
----
-
-## 4. `generate_latex_figures.py`
-
-Generate LaTeX figure blocks automatically from a folder of images.
-
-Example input:
-
-```
-figures/
-  stress_curve.png
-  yield_surface.png
-```
-
-Generated LaTeX:
-
-```
-\begin{figure}
-\centering
-\includegraphics[width=0.7\textwidth]{figures/stress_curve.png}
-\caption{Stress curve}
-\label{fig:stress_curve}
-\end{figure}
-```
-
-File names are automatically converted into readable captions.
-
-Typical uses:
-
-* writing papers
-* thesis preparation
-* rapid figure insertion
-
-
----
-
-## 5. `png2pdf2png.py`
-
-Synchronize image formats within a folder by ensuring each image exists in both PNG and PDF format.
-
-Behavior:
-
-* converts PNG → PDF if PDF does not exist
-* converts PDF → PNG if PNG does not exist
-
-This is useful when journals require PDF figures while LaTeX workflows use PNG.
-
-
----
-
-# Installation
-
-Clone the repository:
-
-```
-git clone https://github.com/YOUR_USERNAME/research-paper-automation.git
+```bash
+git clone https://github.com/<your-username>/research-paper-automation.git
 cd research-paper-automation
 ```
 
-Install dependencies:
+### 2) Install dependencies
 
-```
-pip install -r requirements.txt
-```
+Install the packages used by the scripts (no `requirements.txt` is currently included):
 
-Required libraries:
-
-* pymupdf
-* pillow
-* pdf2image
-* python-pptx
-* pandas
-
----
-
-# Example Workflow
-
-Typical workflow when analyzing a new research paper:
-
-```
-1. Extract figures
-
-python extract_figures.py
-
-2. Generate presentation slides
-
-python generate_slides.py
-
-3. Export annotations and highlights
-
-python pdf_comments.py
-
-4. Generate LaTeX figure blocks
-
-python generate_latex_figures.py
+```bash
+pip install pymupdf pillow pdf2image python-pptx pandas
 ```
 
----
+> Note: `pdf2image` also requires Poppler on your system.
 
-# Repository Structure
+## Data / Inputs
 
+The scripts currently use hard-coded input names/paths inside each file (for example `Scientific_Reports.pdf`, `PNG/`, and output filenames). Place your input files/folders in the repository root unless you update those constants in the script configurations.
+
+Typical expected inputs:
+- `Scientific_Reports.pdf` for figure extraction, slide generation, and annotation extraction.
+- `PNG/` directory for PNG↔PDF synchronization.
+
+## Training / Usage
+
+This repository does **not** contain model training code. It is a document-processing utilities project.
+
+Run scripts from the repository root:
+
+### Extract figures from PDF
+
+```bash
+python scripts/pdf_figures/extract_figures.py
 ```
-research-paper-automation/
 
-extract_figures.py
-generate_slides.py
-pdf_comments.py
-generate_latex_figures.py
-png2pdf2png.py
+### Generate slides from detected figures + captions
 
-examples/
-
-example_paper.pdf
-
-figures/
-output/
+```bash
+python scripts/pdf_figures/generate_slides.py
 ```
 
----
+### Generate LaTeX figure blocks from a figure directory
 
-# Use Cases
+```bash
+python scripts/pdf_figures/generate_latex_figures.py
+```
 
-This toolkit is designed for:
+### Extract PDF comments/annotations to JSON, CSV, and text
 
-* PhD students
-* postdoctoral researchers
-* academic labs
-* research groups
+```bash
+python scripts/pdf_annotations/pdf_comments.py
+```
 
-Typical uses include:
+### Verify extracted annotations against source PDF
 
-* literature reviews
-* paper presentations
-* manuscript preparation
-* extracting datasets of figures
+```bash
+python scripts/pdf_annotations/pdf_comment_verify.py
+```
+
+### Synchronize PNG and PDF files in a folder
+
+```bash
+python scripts/image_format_sync/png2pdf2png.py
+```
+
+## Outputs / Results
+
+Depending on script execution, outputs include:
+- Extracted figure images (for example, in `figures/` or `extracted_figures/`).
+- Slide deck: `paper_presentation.pptx`.
+- LaTeX snippet file: `output/figures.tex`.
+- Annotation exports: `pdf_annotations.json`, `pdf_annotations.csv`, `pdf_annotations_readable.txt`.
+
+## Notes / Limitations
+
+- Scripts are configuration-by-edit (constants in each script), not CLI-argument driven.
+- Paths are relative to the current working directory when running scripts.
+- This is an MVP-style toolkit of standalone scripts rather than a packaged framework.
+- Some files (notably annotation verification) include exploratory or iterative script content; behavior is preserved as-is.
+- No automated test suite is currently included.
